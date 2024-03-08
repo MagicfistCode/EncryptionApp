@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace EncryptionApp
 {
@@ -17,6 +18,39 @@ namespace EncryptionApp
         {
             _privateKey = rsa.ExportParameters(true);
             _publicKey = rsa.ExportParameters(false);
+        }
+
+        public string GetPublicKey()
+        {
+            var sw = new StringWriter();
+            var xmlSerializer = new XmlSerializer(typeof(RSAParameters));
+            xmlSerializer.Serialize(sw, _privateKey);
+            return sw.ToString();
+        }
+
+        public string GetPrivateKey() 
+        {
+            var sw = new StringWriter();
+            var xmlSerializer = new XmlSerializer(typeof(RSAParameters));
+            xmlSerializer.Serialize(sw, _privateKey);
+            return sw.ToString();
+        }
+
+        public string RSAEncrypt(string text)
+        {
+            rsa = new RSACryptoServiceProvider();
+            rsa.ImportParameters(_publicKey);
+            var dataBytes = Encoding.Unicode.GetBytes(text);
+            var cypherData = rsa.Encrypt(dataBytes, false);
+            return Convert.ToBase64String(cypherData);
+        }
+
+        public string RSADecrypt(string cypherText)
+        {
+            var dataBytes = Convert.FromBase64String(cypherText);
+            rsa.ImportParameters(_privateKey);
+            var plainTextBytes = rsa.Decrypt(dataBytes, false);
+            return Convert.ToBase64String(plainTextBytes);
         }
     }
 }
