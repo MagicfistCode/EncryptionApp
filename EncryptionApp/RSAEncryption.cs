@@ -50,7 +50,7 @@ namespace EncryptionApp
             var dataBytes = Convert.FromBase64String(cypherText);
             rsa.ImportParameters(_privateKey);
             var plainTextBytes = rsa.Decrypt(dataBytes, false);
-            return Convert.ToBase64String(plainTextBytes);
+            return Encoding.Unicode.GetString(plainTextBytes);
         }
     }
 }

@@ -48,13 +48,29 @@ namespace EncryptionApp
             if (choice.Equals("1"))
             {
                 //encrpyting the message
-                byte[] encryptedMessage = AESEncryption.AESEncrypt(message, key, iv);
-                string encryptedMessageString = Convert.ToBase64String(encryptedMessage);
-                Console.WriteLine("Encrypted Message: " + encryptedMessageString);
+                byte[] aesEncryptedMessage = AESEncryption.AESEncrypt(message, key, iv);
+                string aesEncryptedMessageString = Convert.ToBase64String(aesEncryptedMessage);
+                Console.WriteLine("Encrypted Message: " + aesEncryptedMessageString);
 
                 //decrypting the message
-                string decryptedMessage = AESEncryption.AESDecrypt(encryptedMessage, key, iv);
-                Console.WriteLine("Decrypted Message: " + decryptedMessage);
+                string aesDecryptedMessage = AESEncryption.AESDecrypt(aesEncryptedMessage, key, iv);
+                Console.WriteLine("Decrypted Message: " + aesDecryptedMessage);
+            } else if (choice.Equals("2"))
+            {
+                //initializing the encrpytion service
+                var rsa = new RSAEncryption();
+
+                //displaying the public key
+                Console.WriteLine("--------------------------- Public Key Below ---------------------------\n" + rsa.GetPublicKey());
+                //displaying the private key
+                Console.WriteLine("--------------------------- Private Key Below ---------------------------\n" + rsa.GetPrivateKey());
+
+                //encrpyting the message
+                var rsaEncryptedMessage = rsa.RSAEncrypt(message);
+                Console.WriteLine("Encrypted Message: " + rsaEncryptedMessage);
+
+                //decrypting the message
+                Console.WriteLine("Decrypted Message: " + rsa.RSADecrypt(rsaEncryptedMessage));
             }
 
             Console.ReadLine();
