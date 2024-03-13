@@ -16,12 +16,6 @@ namespace EncryptionApp
             //declaring the variable for user's choice of encryption type
             string choice;
 
-            byte[] key = new byte[16];
-            byte[] iv = new byte[16];
-
-            RandomNumberGenerator.Create().GetBytes(key);
-            RandomNumberGenerator.Create().GetBytes(iv);
-
             //asking the user to enter a message
             Console.Write("Enter a message you want to encrypt: ");
             //assigning the user input as the message
@@ -47,14 +41,23 @@ namespace EncryptionApp
             //user chooses AES encrption type
             if (choice.Equals("1"))
             {
+                //declaring the byte size as 8 for the key and iv
+                byte[] key = new byte[16];
+                byte[] iv = new byte[16];
+
+                //randomized value for the des key and iv
+                RandomNumberGenerator.Create().GetBytes(key);
+                RandomNumberGenerator.Create().GetBytes(iv);
+
                 //encrpyting the message
                 byte[] aesEncryptedMessage = AESEncryption.AESEncrypt(message, key, iv);
                 string aesEncryptedMessageString = Convert.ToBase64String(aesEncryptedMessage);
-                Console.WriteLine("Encrypted Message: " + aesEncryptedMessageString);
+                Console.WriteLine("AES Encrypted Message: " + aesEncryptedMessageString);
 
                 //decrypting the message
                 string aesDecryptedMessage = AESEncryption.AESDecrypt(aesEncryptedMessage, key, iv);
-                Console.WriteLine("Decrypted Message: " + aesDecryptedMessage);
+                Console.WriteLine("AES Decrypted Message: " + aesDecryptedMessage);
+
             } else if (choice.Equals("2"))
             {
                 //initializing the encrpytion service
@@ -67,10 +70,28 @@ namespace EncryptionApp
 
                 //encrpyting the message
                 var rsaEncryptedMessage = rsa.RSAEncrypt(message);
-                Console.WriteLine("Encrypted Message: " + rsaEncryptedMessage);
+                Console.WriteLine("RSA Encrypted Message: " + rsaEncryptedMessage);
 
                 //decrypting the message
-                Console.WriteLine("Decrypted Message: " + rsa.RSADecrypt(rsaEncryptedMessage));
+                Console.WriteLine("RSA Decrypted Message: " + rsa.RSADecrypt(rsaEncryptedMessage));
+
+            } else if (choice.Equals("3"))
+            {
+                //declaring the byte size as 8 for the key and iv
+                byte[] key = new byte[8];
+                byte[] iv = new byte[8];
+
+                //randomized value for the des key and iv
+                RandomNumberGenerator.Create().GetBytes(key);
+                RandomNumberGenerator.Create().GetBytes(iv);
+
+                //encrpyting the message
+                string desEncryptedMessage = DESEncryption.DESEncrypt(key, iv, message);
+                Console.WriteLine("DES Encrypted Message: " + desEncryptedMessage);
+
+                //decrpyting the message
+                string desDecryptedMessage = DESEncryption.DESDecrypt(key, iv, desEncryptedMessage);
+                Console.WriteLine("DES Decrypted Message: " + desDecryptedMessage);
             }
 
             Console.ReadLine();
