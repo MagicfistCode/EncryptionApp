@@ -92,6 +92,24 @@ namespace EncryptionApp
                 //decrpyting the message
                 string desDecryptedMessage = DESEncryption.DESDecrypt(key, iv, desEncryptedMessage);
                 Console.WriteLine("DES Decrypted Message: " + desDecryptedMessage);
+
+            } else if ( choice.Equals("4"))
+            {
+                //declaring the byte size as 8 for the key and iv
+                byte[] key = new byte[16];
+                byte[] iv = new byte[16];
+
+                //randomized value for the des key and iv
+                RandomNumberGenerator.Create().GetBytes(key);
+                RandomNumberGenerator.Create().GetBytes(iv);
+
+                //encrpyting the message
+                byte[] tdesEncryptedMessage = TripleDESEncryption.TDESEncrpyt(key, iv, message);
+                Console.WriteLine("3DES Encrypted Message: " + System.Text.Encoding.UTF8.GetString(tdesEncryptedMessage));
+
+                //decrpyting the message
+                string tdesDecryptedMessage = TripleDESEncryption.TDESDecrpyt(key, iv, tdesEncryptedMessage);
+                Console.WriteLine("3DES Decrypted Message: " + tdesDecryptedMessage);
             }
 
             Console.ReadLine();
